@@ -9,16 +9,18 @@ class TweetController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * 一覧画面への移動
      */
     public function index()
     {
         //追加
-        $tweets = Tweet::with('user')->latest()->get();
+        $tweets = Tweet::with(['user', 'liked'])->latest()->get();
         return view('tweets.index', compact('tweets'));
     }
 
     /**
      * Show the form for creating a new resource.
+     * 入力画面への移動
      */
     public function create()
     {
@@ -28,10 +30,11 @@ class TweetController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 入力されたデータを保存
      */
     public function store(Request $request)
     {
-        //
+        // 正しいデータかどうかの確認（バリデーション）
         $request->validate([
             'tweet' => 'required|max:255',
         ]);
@@ -43,33 +46,49 @@ class TweetController extends Controller
 
     /**
      * Display the specified resource.
+     * 詳細画面への移動
      */
     public function show(Tweet $tweet)
     {
         //
+        return view('tweets.show', compact('tweet'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     * 編集画面への移動
      */
     public function edit(Tweet $tweet)
     {
         //
+        return view('tweets.edit', compact('tweet'));
     }
 
     /**
      * Update the specified resource in storage.
+     * 更新したデータを保存
      */
     public function update(Request $request, Tweet $tweet)
     {
-        //
+        //正しいデータが入力されているかの確認
+        $request->validate([
+            'tweet' => 'required|max:255',
+        ]);
+
+        $tweet->update($request->only('tweet'));
+
+        return redirect()->route('tweets.show', $tweet);
     }
 
     /**
      * Remove the specified resource from storage.
+     * 入力されたデータを削除
      */
     public function destroy(Tweet $tweet)
     {
         //
+        $tweet->delete();
+
+        return redirect()->route('tweets.index');
     }
 }

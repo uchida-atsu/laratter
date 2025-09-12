@@ -12,10 +12,17 @@ class Tweet extends Model
 
     protected $fillable = ['tweet'];
 
+    // 一対多
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
+    }
+
     // 多対多の連携
     public function liked()
     {

@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+// 追加
+use App\Models\User;
 
 class ProfileController extends Controller
-{
+{   
+    /**
+     * Show the user's profile form.
+     */
+    public function show(User $user)
+    {
+        return view('profile.show', compact('user'));
+    }
+
     /**
      * Display the user's profile form.
      */
